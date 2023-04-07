@@ -71,11 +71,11 @@ gv2=(v2-v2_min)*(v2_max-v2);
 
 g01=(x1-x10_min)*(x10_max-x1); %must belong in secret set
 g02=(x2-x20_min)*(x20_max-x2); %must belong in non-secret set
-g03=-(v1-v2)^2+delta^2; %outputs must be delta close
+g03=-(v1-v2)^2+delta^2; %velocity must be delta close
 
 g0=[g01; g02; gv1; gv2; g03];
 
-% Semialgebraic sets for unsafe set (the region where outputs don't match)
+% Semialgebraic sets for unsafe set (the region where velocities don't match)
 
 gun=(v1-v2)^2-delta^2-0.01; 
 
@@ -196,6 +196,9 @@ SOLV4 = sosgetsol(prog, -B_f+Barrier-L*g);
 [P_b4,z_b4]= findsos(SOLV4);
 
 aaa = [length(P_b2),length(P_b3),length(P_b4)];
-mmm = [length(z_b2),length(z_b3),length(z_b4)]
 
+%if the lengths of these are non-zero, then the conditions are SOS
+mmm = [length(z_b2),length(z_b3),length(z_b4)] 
+
+final_barrier=barrier
 toc

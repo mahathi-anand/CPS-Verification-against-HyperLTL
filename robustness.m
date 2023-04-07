@@ -27,6 +27,8 @@ varx=[x1;x2];
 
 t_s= 5;%sampling time
 
+%We shift the system torwards the origin by 20 to calculate barrier
+
 T_h= 55-20; %heater temperature
 
 T_e= 15-20; %ambient temperature 
@@ -48,6 +50,7 @@ f_x2= (x2)+t_s*(a_e*(T_e-(x2))) + a_h*(T_h-(x2))*u2*t_s;
 %==== Regions of interest for augmented system ==============
 
 %state space
+%We shift the system torwards the origin by 20 to calculate barrier
 
 x1_min=20-20;
 x1_max=35-20;
@@ -242,13 +245,15 @@ SOLV4 = sosgetsol(prog, -B_f+Barrier-L*g);
 [P_b4,z_b4]= findsos(SOLV4);
 
 aaa = [length(P_b2),length(P_b31),length(P_b32),length(P_b33),length(P_b4)];
+
+%if the lengths of these are non-zero, then the conditions are SOS
 mmm = [length(z_b2),length(z_b31),length(z_b32),length(z_b33),length(z_b4)]
 
 lastcond=sosgetsol(prog,-B_f+Barrier);
 
 %Barrier certificate for unshifted system 
 
-barr=subs(barrier,{x1,x2},{x1-20,x2-20});
-lastcond=subs(lastcond,{x1,x2},{x1-20,x2-20});
+barr=simplify(subs(barrier,{x1,x2},{x1-20,x2-20}));
 
+final_barrier=barr
 toc
